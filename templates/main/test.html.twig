@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} | Tests {% endblock %}
+
+{% block body %}
+    <h1>Tests de démonstration</h1>
+
+    {# Création de variable #}
+    {% set name = "Guillaume" %}
+    <h2>{{ name }}</h2>
+
+    {# Création d'un tableau #}
+    {% set colors = ['blue', 'red', 'yellow', 'purple'] %}
+
+    {% for color in colors %}
+        {% if color != 'red' %}
+            <div>Index : {{ loop.index }}</div>
+            <div style="background-color: {{ color }}"> {{ color }} </div>
+        {% endif %}
+
+        {% if loop.first %}
+            <div>Premiere itération</div>
+        {% endif %}
+
+        {% if loop.last %}
+            <div>dernière itération</div>
+            <div>nombre d'élément: {{ loop.length }}</div>
+        {% endif %}
+    {% endfor %}
+
+    {# Création d'un objet #}
+    {% set book = {
+        title : "Mon livre",
+        year : 2021,
+        author : "John Doe"
+    }
+    %}
+
+    <h2>{{ book.title }}</h2>
+    {% for key, val in book %}
+        <div>{{ key }} : {{ val }}</div>
+    {% endfor %}
+
+    {# filtres#}
+    <h2>Les filtres</h2>
+    <div>{{ name|upper }}, {{ name|length }} lettres</div>
+    <div>{{ colors|length }} couleurs</div>
+    <div>Mon tableau : {{ colors|join("-") }}</div>
+    <div>Date d'aujourd'hui : {{ "now"|date('y-m-d') }}</div>
+
+{% endblock %}
