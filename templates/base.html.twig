@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,26 +8,47 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %} Series {% endblock %}</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
-    <!-- Icon de l'onglet -->
+    <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
+    <!-- Icone de l'onglet -->
     <link rel="icon" href="{{ asset('img/icon.png') }}">
     <!-- Police by Google Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+    {% block extrastyles %} {% endblock %}
 </head>
+
 <body>
 
-    <header>
-        <h1><a href="{{ path('main_home') }}"><img src="{{ asset('img/logo.svg') }}" alt="Series"></a></h1>
-        {% include 'menu/nav.html.twig' %}
-    </header>
-    <main>
-        {% block body %} {% endblock %}
-    </main>
-    <footer>
-        {% include 'menu/nav.html.twig' %}
-    </footer>
+    <div class="container">
+        <header>
+            <h1><a href="{{ path('main_home') }}"><img src="{{ asset('img/logo.svg') }}" class="logo" alt="Series"></a></h1>
+            {% include 'menu/nav.html.twig' %}
+        </header>
 
+        <!-- Gestion de message flash -->
+
+        {% for label, messages in app.flashes %}
+            <div class="flash">
+            {% for message in messages %}
+                <div class="flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endfor %}
+
+
+        <main>
+            {% block body %} {% endblock %}
+        </main>
+        <footer>
+            <div>
+                {% include 'menu/nav.html.twig' %}
+            </div>
+
+        </footer>
+    </div>
 </body>
+
 </html>

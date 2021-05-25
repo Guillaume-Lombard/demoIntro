@@ -1,6 +1,8 @@
-<nav>
-    <ul>
-        <li><a href="{{ path('main_home') }}">Home</a> </li>
-        <li><a href="{{ path('main_test') }}">Tests</a> </li>
-    </ul>
+<nav class="topnav">
+
+        <a class="active" href="{{ path('main_home') }}"    title="Home"           >Home      </a>
+        <a class="active" href="{{ path('main_test') }}"    title="Tests"          >Tests     </a>
+        <a class="active" href="{{ path('serie_list', {'page' : 1}) }}"   title="All Series"     >All Series</a>
+        <a class="active" href="{{ path('serie_create') }}" title="Add a new serie">Create    </a>
+
 </nav>
