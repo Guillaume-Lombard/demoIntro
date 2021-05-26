@@ -1,8 +1,18 @@
 <nav class="topnav">
 
-        <a class="active" href="{{ path('main_home') }}"    title="Home"           >Home      </a>
-        <a class="active" href="{{ path('main_test') }}"    title="Tests"          >Tests     </a>
-        <a class="active" href="{{ path('serie_list', {'page' : 1}) }}"   title="All Series"     >All Series</a>
-        <a class="active" href="{{ path('serie_create') }}" title="Add a new serie">Create    </a>
+        <a class="active" href="{{ path('main_home') }}" title="Home">Home</a>
+        <a class="active" href="{{ path('main_test') }}" title="Tests">Tests</a>
+        <a class="active" href="{{ path('serie_list', {'page' : 1}) }}" title="All Series">All Series</a>
+        {% if app.user %}
+                <a class="active" href="{{ path('serie_create') }}" title="Add a new serie">Create</a>
+                <a class="active" href="{{ path('season_create') }}" title="Add a new season">Create Season</a>
+                {% if is_granted("ROLE_ADMIN") %}
+                        <a class="active" href="{{ path('admin_main') }}" title="For admin">Administrate</a>
+                {% endif %}
+                <a class="active" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.firstName }})</a>
+        {% else%}
+                <a class="active" href="{{ path('app_login') }}" title="Login">Login</a>
+                <a class="active" href="{{ path('app_register') }}" title="Register">Register</a>
+        {% endif %}
 
 </nav>

@@ -100,4 +100,54 @@ class SerieController extends AbstractController
             'serieForm' => $serieForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/series/delete/{id}", name="serie_delete")
+     */
+    public function delete($id, EntityManagerInterface $entityManager, SerieRepository $serieRepository): Response
+    {
+        //$serie = $serieRepository->find($id);
+        //même methode pour atteindre la methode find()
+        $serie = $entityManager->find(Serie::class, $id);
+        $entityManager->remove($serie);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Serie deleted !');
+
+        return $this->redirectToRoute('main_home');
+    }
+
+    /**
+     * @Route("/series/edit/{id}", name="serie_edit")
+     */
+    public function edit($id, SerieRepository $serieRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $serie = $serieRepository->find($id);
+
+        //leve exception si serie existe pas : page 404
+        if (!$serie){
+            throw $this->createNotFoundException("Oops ! This serie does not exist !");
+        }
+
+        $serieForm = $this->createForm(SerieType::class, $serie);
+        $serieForm->handleRequest($request);
+
+        if ($serieForm->isSubmitted() && $serieForm->isValid()){
+            $serie->setDateModified(new \DateTime());
+
+            //enregistre les données en BDD
+            $entityManager->persist($serie);
+            $entityManager->flush();
+
+            //message flash
+            $this->addFlash('success', 'Serie edited !');
+
+            return $this->redirectToRoute('serie_detail', ['id' => $serie->getId()]);
+
+        }
+        return $this->render('serie/edit.html.twig', [
+            "serie" => $serie,
+            "serieForm"=>$serieForm->createView()
+        ]);
+    }
 }

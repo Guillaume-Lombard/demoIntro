@@ -141,3 +141,15 @@ select {
     border-radius: 5px;
     color: #132135;
 }
+
+/*************** Seasons ************************************/
+
+.seasons article {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.seasons article img {
+    max-height: 200px;
+    margin-right: 0.6rem;
+}
