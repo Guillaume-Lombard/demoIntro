@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Serie;
 use App\Form\SerieType;
+use App\ManageEntity\UpdateEntity;
 use App\Repository\SerieRepository;
+use App\Upload\SerieImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -72,7 +75,7 @@ class SerieController extends AbstractController
     /**
      * @Route("/series/create", name="serie_create")
      */
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity, SerieImage $image): Response
     {
         //genere le formulaire à partie de SerieType pour l'envoi au twig
         $serie = new Serie();
@@ -82,12 +85,25 @@ class SerieController extends AbstractController
         //associe les données à l'instance de serie
         $serieForm->handleRequest($request);
 
+
+
+
         //test si le formulaire est soumit et si données sont valides
         if ($serieForm->isSubmitted() && $serieForm->isValid()){
 
-            //enregistre les données en BDD
-            $entityManager->persist($serie);
-            $entityManager->flush();
+            //gestion de l'upload de l'image poster
+            //on recupere l'image en temporaire
+            $file = $serieForm->get('poster')->getData();
+            /**
+             * @var UploadedFile $file
+             */
+            if ($file){
+                $directory = $this->getParameter('upload_poster_series_dir');
+                $image->save($file, $serie, $directory);
+            }
+
+            //enregistre les données en BDD grace au service UpdateEntity
+            $updateEntity->save($serie);
 
             //message flash
             $this->addFlash('success', 'Serie added !');
